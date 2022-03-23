@@ -27,7 +27,11 @@ public class AddressBookMain {
         }
 
         private void showContact(){
-            System.out.println(contact.toString());
+            try {
+                System.out.println(contact.toString());
+            }catch(NullPointerException npe){
+                System.out.println("Contact is Blank");
+            }
         }
 
         private void editContact(){
@@ -55,6 +59,16 @@ public class AddressBookMain {
                 System.out.println("Contact Not Found");
             }
         }
+        public void deleteContact(){
+            System.out.println("Enter the Name: ");
+            String fname = scanner.next();
+            if(fname.equalsIgnoreCase(contact.getFirstName())){
+                System.out.println("Contact Found");
+                contact = null ;
+            }else{
+                System.out.println("Contact Not Found");
+            }
+        }
 
     public static void main(String[] args) {
         System.out.println("Welcome to Address Book program");
@@ -62,6 +76,8 @@ public class AddressBookMain {
         addressBookMain.addContact();
         addressBookMain.showContact();
         addressBookMain.editContact();
+        addressBookMain.showContact();
+        addressBookMain.deleteContact();
         addressBookMain.showContact();
     }
 }
