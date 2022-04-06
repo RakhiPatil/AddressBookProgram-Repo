@@ -1,5 +1,8 @@
 package com.infogalaxy;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -94,7 +97,9 @@ public class AddressBookMain {
                 String contactData = null;
                 for (int i = 0; i < contactArrayList.size(); i++) {
                     Contact contact = contactArrayList.get(i);
-                    contactData = contact.getFirstName() + "," + contact.getLastName() + "," + contact.getAddress() + "," + contact.getCity() + "," + contact.getState() + "," + contact.getZip() + "," + contact.getPhoneNumber() + "," + contact.getEmail() + "\n" + contactData;
+                    contactData = contact.getFirstName() + "," + contact.getLastName() + "," + contact.getAddress()
+                            + "," + contact.getCity() + "," + contact.getState() + "," + contact.getZip() + ","
+                            + contact.getPhoneNumber() + "," + contact.getEmail() + "\n" + contactData;
                 }
                 Path file = Paths.get("MyAddressBook.txt");
                 byte[] byteData = contactData.getBytes();
@@ -106,36 +111,61 @@ public class AddressBookMain {
                 e.printStackTrace();
             }
         }
+        public void restoreContact(){
+          contactArrayList.clear();
+          String data= null;
+          try {
+              BufferedReader br = new BufferedReader(new FileReader("MyAddressBook.txt"));
+              while ((data = br.readLine()) != null && !data.equals("null")) {
+                  String[] seperatedData = data.split(",");
+                  Contact contact = new Contact();
+                  contact.setFirstName(seperatedData[0]);
+                  contact.setLastName(seperatedData[1]);
+                  contact.setAddress(seperatedData[2]);
+                  contact.setCity(seperatedData[3]);
+                  contact.setState(seperatedData[4]);
+                  contact.setZip(seperatedData[5]);
+                  contact.setPhoneNumber(seperatedData[6]);
+                  contact.setEmail(seperatedData[7]);
+                  contactArrayList.add(contact);
+                  System.out.println("Contacts Restored Successfully!!");
+              }
+          } catch(FileNotFoundException e){
+              e.printStackTrace();
+          }catch (IOException e){
+              e.printStackTrace();
+          }
+        }
 
     public static void main(String[] args) {
         System.out.println("Welcome to Address Book program");
         AddressBookMain addressBookMain = new AddressBookMain();
         int ch;
         do {
-            System.out.println("1. Add Contact " + "\n" + "2.Edit Contact" + "\n" + "3.Delete Contact" + "\n" + "4.Show Contact"+"\n"+"5.Backup To Files");
+            System.out.println("1. Add Contact " + "\n" + "2.Edit Contact" + "\n" + "3.Delete Contact" + "\n" +
+                    "4.Show Contact"+"\n"+"5.Backup To Files"+"\n"+"6.Restore Contact From Files");
             System.out.println("Enter the choice: ");
             ch = scanner.nextInt();
             switch (ch) {
                 case 1:
                     addressBookMain.addContact();
                     break;
-
                 case 2:
                     addressBookMain.editContact();
                     break;
-
                 case 3:
                     addressBookMain.deleteContact();
                     break;
-
                 case 4:
                     addressBookMain.showContact();
                     break;
                 case 5:
                     addressBookMain.backupToFile();
                     break;
+                case 6:
+                    addressBookMain.restoreContact();
             }
-        }while(ch != 6);
+        }while(ch != 7);
 
     }
 }
